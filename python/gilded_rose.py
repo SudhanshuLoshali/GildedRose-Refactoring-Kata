@@ -7,6 +7,8 @@ class GildedRose:
     BACKSTAGE_PASSES = "Backstage passes to a TAFKAL80ETC concert"
     SULFURAS = "Sulfuras, Hand of Ragnaros"
     CONJURED_PREFIX = "Conjured"
+    MAX_QUALITY = 50
+    MIN_QUALITY = 0
 
     def __init__(self, items):
         """Initialize with a list of items."""
@@ -28,38 +30,38 @@ class GildedRose:
 
     def _update_normal_item(self, item):
         """Update quality and sell-in for normal items."""
-        if item.quality > 0:
+        if item.quality > self.MIN_QUALITY:
             item.quality -= 1
         item.sell_in -= 1
-        if item.sell_in < 0 < item.quality:
+        if item.sell_in < 0 and item.quality > self.MIN_QUALITY:
             item.quality -= 1
 
     def _update_aged_brie(self, item):
         """Update quality and sell-in for Aged Brie."""
-        if item.quality < 50:
+        if item.quality < self.MAX_QUALITY:
             item.quality += 1
         item.sell_in -= 1
-        if item.sell_in < 0 and item.quality < 50:
+        if item.sell_in < 0 and item.quality < self.MAX_QUALITY:
             item.quality += 1
 
     def _update_backstage_passes(self, item):
         """Update quality and sell-in for Backstage Passes."""
-        if item.quality < 50:
+        if item.quality < self.MAX_QUALITY:
             item.quality += 1
-            if item.sell_in < 11 and item.quality < 50:
+            if item.sell_in < 11 and item.quality < self.MAX_QUALITY:
                 item.quality += 1
-            if item.sell_in < 6 and item.quality < 50:
+            if item.sell_in < 6 and item.quality < self.MAX_QUALITY:
                 item.quality += 1
         item.sell_in -= 1
         if item.sell_in < 0:
-            item.quality = 0
+            item.quality = self.MIN_QUALITY
 
     def _update_conjured_item(self, item):
         """Update quality and sell-in for Conjured items (degrade twice as fast)."""
-        if item.quality > 0:
+        if item.quality > self.MIN_QUALITY:
             item.quality -= 2 if item.quality >= 2 else item.quality
         item.sell_in -= 1
-        if item.sell_in < 0 < item.quality:
+        if item.sell_in < 0 and item.quality > self.MIN_QUALITY:
             item.quality -= 2 if item.quality >= 2 else item.quality
 
 
