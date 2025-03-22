@@ -6,6 +6,7 @@ class GildedRose:
     AGED_BRIE = "Aged Brie"
     BACKSTAGE_PASSES = "Backstage passes to a TAFKAL80ETC concert"
     SULFURAS = "Sulfuras, Hand of Ragnaros"
+    CONJURED_PREFIX = "Conjured"
 
     def __init__(self, items):
         """Initialize with a list of items."""
@@ -20,6 +21,8 @@ class GildedRose:
                 self._update_backstage_passes(item)
             elif item.name == self.SULFURAS:
                 pass  # Sulfuras never changes
+            elif self.CONJURED_PREFIX in item.name:
+                self._update_conjured_item(item)
             else:
                 self._update_normal_item(item)
 
@@ -50,6 +53,14 @@ class GildedRose:
         item.sell_in -= 1
         if item.sell_in < 0:
             item.quality = 0
+
+    def _update_conjured_item(self, item):
+        """Update quality and sell-in for Conjured items (degrade twice as fast)."""
+        if item.quality > 0:
+            item.quality -= 2 if item.quality >= 2 else item.quality
+        item.sell_in -= 1
+        if item.sell_in < 0 < item.quality:
+            item.quality -= 2 if item.quality >= 2 else item.quality
 
 
 class Item:
